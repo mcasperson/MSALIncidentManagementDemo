@@ -37,3 +37,24 @@ html, body {
   flex-grow: 1;
   margin: 10px;
 }
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.formRow {
+  display: flex;
+  flex-direction: row;
+  margin-top: 10px;
+  flex-grow: 1;
+  justify-content: center;
+}
+
+label {
+  width: 150px;
+}
+
+input, select {
+  min-width: 300px;
+}
