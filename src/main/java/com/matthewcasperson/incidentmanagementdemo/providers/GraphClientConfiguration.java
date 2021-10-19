@@ -1,8 +1,6 @@
 package com.matthewcasperson.incidentmanagementdemo.providers;
 
-
 import com.azure.spring.autoconfigure.aad.AADAuthenticationProperties;
-import com.matthewcasperson.onenotebackend.providers.OboAuthenticationProvider;
 import com.microsoft.graph.requests.GraphServiceClient;
 import java.util.Set;
 import okhttp3.Request;
