@@ -33,6 +33,10 @@ html, body {
   color: white;
 }
 
+.title a {
+  color: white;
+}
+
 .main {
   flex-grow: 1;
   margin: 10px;

@@ -3,22 +3,23 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <div class="title">INCIDENT MANAGEMENT</div>
-      <div class="tab"><a href="create">Create Channel</a></div>
-      <div class="tab"><a href="update">Update Channel</a></div>
-    </div>
-    <div class="main">
-      <form class="formContainer">
-        <div class="formRow">
-          <label>Channel name:</label>
-          <input type="text" value="">
-        </div>
-        <div class="formRow">
-          <input type="button" value="Create Channel">
-        </div>
-    </div>
+<div class="container">
+  <div class="header">
+    <div class="title">INCIDENT MANAGEMENT</div>
+    <div class="tab"><a href="create">Create Channel</a></div>
+    <div class="tab"><a href="update">Update Channel</a></div>
   </div>
+  <div class="main">
+    <form class="formContainer" action="#" th:action="@{/create}" method="post">
+      <div class="formRow">
+        <label>Channel name:</label>
+        <input type="text" value="" name="channel">
+      </div>
+      <div class="formRow">
+        <input type="button" value="Create Channel">
+      </div>
+    </form>
+  </div>
+</div>
 </body>
 </html>
