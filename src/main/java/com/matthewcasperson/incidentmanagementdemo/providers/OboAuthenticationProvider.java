@@ -1,4 +1,4 @@
-package com.matthewcasperson.onenotebackend.providers;
+package com.matthewcasperson.incidentmanagementdemo.providers;
 
 import com.microsoft.aad.msal4j.ClientCredentialFactory;
 import com.microsoft.aad.msal4j.ConfidentialClientApplication;
@@ -50,6 +50,16 @@ public class OboAuthenticationProvider extends BaseAuthenticationProvider {
       return CompletableFuture.completedFuture(null);
     }
 
+    final OnBehalfOfParameters parameters = OnBehalfOfParameters
+        .builder(scopes, new UserAssertion(getAccessToken()))
+        .build();
+
+    return createApp()
+        .map(a -> a.acquireToken(parameters).thenApply(IAuthenticationResult::accessToken))
+        .orElse(CompletableFuture.failedFuture(new Exception("Failed to generate obo token.")));
+  }
+
+  private String getAccessToken() {
     final OAuth2AuthenticationToken authentication =
         (OAuth2AuthenticationToken) SecurityContextHolder
             .getContext()
@@ -60,15 +70,7 @@ public class OboAuthenticationProvider extends BaseAuthenticationProvider {
             authentication.getAuthorizedClientRegistrationId(),
             authentication.getName());
 
-    final String accessToken = client.getAccessToken().getTokenValue();
-
-    final OnBehalfOfParameters parameters = OnBehalfOfParameters
-        .builder(scopes, new UserAssertion(accessToken))
-        .build();
-
-    return createApp()
-        .map(a -> a.acquireToken(parameters).thenApply(IAuthenticationResult::accessToken))
-        .orElse(CompletableFuture.failedFuture(new Exception("Failed to generate obo token.")));
+    return client.getAccessToken().getTokenValue();
   }
 
   private Optional<ConfidentialClientApplication> createApp() {
