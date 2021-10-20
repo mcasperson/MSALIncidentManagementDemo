@@ -13,12 +13,14 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import javax.annotation.Nonnull;
+import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
 
 public class OboAuthenticationProvider extends BaseAuthenticationProvider {
 
@@ -28,19 +30,22 @@ public class OboAuthenticationProvider extends BaseAuthenticationProvider {
   private final String clientId;
   private final String clientSecret;
   private final Set<String> scopes;
-  private final OAuth2AuthorizedClientService clientService;
+  private final OAuth2AuthorizedClientRepository clientRepository;
+  private final HttpServletRequest request;
 
   public OboAuthenticationProvider(
       final Set<String> scopes,
       final String tenantId,
       final String clientId,
       final String clientSecret,
-      final OAuth2AuthorizedClientService clientService) {
+      final OAuth2AuthorizedClientRepository clientService,
+      final HttpServletRequest request) {
     this.scopes = scopes;
     this.tenantId = tenantId;
     this.clientId = clientId;
     this.clientSecret = clientSecret;
-    this.clientService = clientService;
+    this.clientRepository = clientService;
+    this.request = request;
   }
 
   @Nonnull
@@ -66,9 +71,10 @@ public class OboAuthenticationProvider extends BaseAuthenticationProvider {
             .getAuthentication();
 
     final OAuth2AuthorizedClient client =
-        clientService.loadAuthorizedClient(
+        clientRepository.loadAuthorizedClient(
             authentication.getAuthorizedClientRegistrationId(),
-            authentication.getName());
+            authentication,
+            request);
 
     return client.getAccessToken().getTokenValue();
   }

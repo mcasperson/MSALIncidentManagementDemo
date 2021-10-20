@@ -3,11 +3,17 @@ package com.matthewcasperson.incidentmanagementdemo.providers;
 import com.azure.spring.autoconfigure.aad.AADAuthenticationProperties;
 import com.microsoft.graph.requests.GraphServiceClient;
 import java.util.Set;
+import javax.servlet.http.HttpServletRequest;
 import okhttp3.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.annotation.RequestScope;
 
 @Configuration
 public class GraphClientConfiguration {
@@ -16,10 +22,11 @@ public class GraphClientConfiguration {
   AADAuthenticationProperties azureAd;
 
   @Autowired
-  OAuth2AuthorizedClientService clientService;
+  OAuth2AuthorizedClientRepository clientRepository;
 
   @Bean
-  public GraphServiceClient<Request> getClient() {
+  @RequestScope
+  public GraphServiceClient<Request> getClient(HttpServletRequest request) {
     return GraphServiceClient.builder()
         .authenticationProvider(new OboAuthenticationProvider(
             Set.of("https://graph.microsoft.com/Channel.Create",
@@ -28,7 +35,8 @@ public class GraphClientConfiguration {
             azureAd.getTenantId(),
             azureAd.getClientId(),
             azureAd.getClientSecret(),
-            clientService))
+            clientRepository,
+            request))
         .buildClient();
   }
 }

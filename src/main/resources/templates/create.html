@@ -12,11 +12,18 @@
   <div class="main">
     <form class="formContainer" action="#" th:action="@{/create}" method="post">
       <div class="formRow">
+        <label>Team:</label>
+        <select size="5" id="team">
+          <option th:each="team: ${teams}" th:value="${team.internalId}" th:text="${team.displayName}">
+          </option>
+        </select>
+      </div>
+      <div class="formRow">
         <label>Channel name:</label>
         <input type="text" value="" name="channel">
       </div>
       <div class="formRow">
-        <input type="button" value="Create Channel">
+        <input type="submit" value="Create Channel">
       </div>
     </form>
   </div>
