@@ -18,8 +18,9 @@ public class AuthSecurityConfig {
       super.configure(http);
       // All the paths that match `/api/**`(configurable) work as the resource server.
       // Other paths work as  the web application.
-      http.antMatcher("/api/**")
-          .authorizeRequests().anyRequest().authenticated();
+      http
+        .antMatcher("/api/**")
+        .authorizeRequests().anyRequest().authenticated();
     }
   }
 
@@ -31,10 +32,10 @@ public class AuthSecurityConfig {
       super.configure(http);
       // @formatter:off
       http
-          .authorizeRequests()
+        .authorizeRequests()
           .antMatchers("/", "/login", "/*.js", "/*.css").permitAll()
           .anyRequest().authenticated()
-          .and()
+        .and()
           .csrf()
           .disable();
       // @formatter:on

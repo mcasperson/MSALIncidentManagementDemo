@@ -32,16 +32,20 @@ public class IncidentWebController {
   @GetMapping("/create")
   public ModelAndView getCreate(@RegisteredOAuth2AuthorizedClient("api") final OAuth2AuthorizedClient client) {
 
-    final List teams = webClient
-        .get()
-        .uri("http://localhost:8080/api/teams/")
-        .attributes(oauth2AuthorizedClient(client))
-        .retrieve()
-        .bodyToMono(List.class)
-        .block();
-
     final ModelAndView mav = new ModelAndView("create");
-    mav.addObject("teams", teams);
+
+    try {
+      final List teams = webClient
+          .get()
+          .uri("http://localhost:8080/api/teams/")
+          .attributes(oauth2AuthorizedClient(client))
+          .retrieve()
+          .bodyToMono(List.class)
+          .block();
+      mav.addObject("teams", teams);
+    } catch (final Exception ex) {
+      mav.addObject("teams", List.of());
+    }
     return mav;
   }
 
