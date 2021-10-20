@@ -20,7 +20,8 @@ public class GraphClientConfiguration {
         .authenticationProvider(new OboAuthenticationProvider(
             Set.of("https://graph.microsoft.com/Channel.Create",
                 "https://graph.microsoft.com/ChannelMember.ReadWrite.All",
-                "https://graph.microsoft.com/ChannelMessage.Send"),
+                "https://graph.microsoft.com/ChannelMessage.Send",
+                "https://graph.microsoft.com/Team.ReadBasic.All"),
             azureAd.getTenantId(),
             azureAd.getClientId(),
             azureAd.getClientSecret()))
