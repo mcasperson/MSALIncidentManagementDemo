@@ -42,15 +42,29 @@ public class IncidentWebController {
           .retrieve()
           .bodyToMono(List.class)
           .block();
+
+      final List users = webClient
+          .get()
+          .uri("http://localhost:8080/api/users/")
+          .attributes(oauth2AuthorizedClient(client))
+          .retrieve()
+          .bodyToMono(List.class)
+          .block();
+
       mav.addObject("teams", teams);
+      mav.addObject("users", users);
     } catch (final Exception ex) {
       mav.addObject("teams", List.of());
+      mav.addObject("users", List.of());
     }
     return mav;
   }
 
   @PostMapping("/create")
-  public String postCreate(@RequestParam final String channel) {
+  public String postCreate(
+      @RequestParam final String channel,
+      @RequestParam final String team,
+      @RequestParam final List<String> user) {
     return "update";
   }
 }

@@ -21,7 +21,8 @@ public class GraphClientConfiguration {
             Set.of("https://graph.microsoft.com/Channel.Create",
                 "https://graph.microsoft.com/ChannelMember.ReadWrite.All",
                 "https://graph.microsoft.com/ChannelMessage.Send",
-                "https://graph.microsoft.com/Team.ReadBasic.All"),
+                "https://graph.microsoft.com/Team.ReadBasic.All",
+                "https://graph.microsoft.com/User.ReadBasic.All"),
             azureAd.getTenantId(),
             azureAd.getClientId(),
             azureAd.getClientSecret()))

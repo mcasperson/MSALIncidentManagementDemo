@@ -13,8 +13,15 @@
     <form class="formContainer" action="#" th:action="@{/create}" method="post">
       <div class="formRow">
         <label>Team:</label>
-        <select size="5" id="team">
-          <option th:each="team: ${teams}" th:value="${team.internalId}" th:text="${team.displayName}">
+        <select size="5" name="team">
+          <option th:each="team: ${teams}" th:value="${team.id}" th:text="${team.displayName}">
+          </option>
+        </select>
+      </div>
+      <div class="formRow">
+        <label>Users:</label>
+        <select size="5" name="user" multiple>
+          <option th:each="user: ${users}" th:value="${user.userPrincipalName}" th:text="${user.userPrincipalName}">
           </option>
         </select>
       </div>
