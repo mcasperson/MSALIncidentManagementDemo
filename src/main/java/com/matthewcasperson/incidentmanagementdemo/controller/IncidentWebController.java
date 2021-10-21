@@ -2,6 +2,7 @@ package com.matthewcasperson.incidentmanagementdemo.controller;
 
 import static org.springframework.security.oauth2.client.web.reactive.function.client.ServerOAuth2AuthorizedClientExchangeFilterFunction.oauth2AuthorizedClient;
 
+import com.microsoft.graph.models.Channel;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
@@ -22,11 +23,6 @@ public class IncidentWebController {
   @GetMapping("/")
   public String getIndex() {
     return "index";
-  }
-
-  @GetMapping("/update")
-  public String getUpdate() {
-    return "update";
   }
 
   @GetMapping("/create")
@@ -61,10 +57,24 @@ public class IncidentWebController {
   }
 
   @PostMapping("/create")
-  public String postCreate(
+  public ModelAndView postCreate(
+      @RegisteredOAuth2AuthorizedClient("api") final OAuth2AuthorizedClient client,
       @RequestParam final String channel,
       @RequestParam final String team,
-      @RequestParam final List<String> user) {
-    return "update";
+      @RequestParam final List<String> users) {
+
+    final ModelAndView mav = new ModelAndView("update");
+
+    final Channel newChannel = webClient
+        .post()
+        .uri("http://localhost:8080/api/teams/" + team + "/channel")
+        .bodyValue(new IncidentRestController.NewChannelBody(channel, users))
+        .attributes(oauth2AuthorizedClient(client))
+        .retrieve()
+        .bodyToMono(Channel.class)
+        .block();
+
+    mav.addObject("channel", newChannel);
+    return mav;
   }
 }

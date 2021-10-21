@@ -20,7 +20,7 @@
       </div>
       <div class="formRow">
         <label>Users:</label>
-        <select size="5" name="user" multiple>
+        <select size="5" name="users" multiple>
           <option th:each="user: ${users}" th:value="${user.userPrincipalName}" th:text="${user.userPrincipalName}">
           </option>
         </select>
