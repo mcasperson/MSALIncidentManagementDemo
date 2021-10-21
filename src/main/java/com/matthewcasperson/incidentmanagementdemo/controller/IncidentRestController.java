@@ -3,6 +3,7 @@ package com.matthewcasperson.incidentmanagementdemo.controller;
 import com.google.gson.JsonPrimitive;
 import com.microsoft.graph.http.BaseCollectionPage;
 import com.microsoft.graph.models.Channel;
+import com.microsoft.graph.models.ChannelMembershipType;
 import com.microsoft.graph.models.ConversationMember;
 import com.microsoft.graph.models.Team;
 import com.microsoft.graph.models.User;
@@ -74,6 +75,7 @@ public class IncidentRestController {
       @RequestBody final NewChannelBody newChannelBody) {
     final Channel channel = new Channel();
     channel.displayName = newChannelBody.channelName;
+    channel.membershipType = ChannelMembershipType.PRIVATE;
 
     final Channel newChannel = client
         .teams(team)
@@ -89,12 +91,17 @@ public class IncidentRestController {
           "user@odata.bind",
           new JsonPrimitive("https://graph.microsoft.com/v1.0/users('" + memberId + "')"));
 
-      client
-          .teams(team)
-          .channels(newChannel.id)
-          .members()
-          .buildRequest()
-          .post(member);
+      try {
+        client
+            .teams(team)
+            .channels(newChannel.id)
+            .members()
+            .buildRequest()
+            .post(member);
+      } catch (final Exception ex) {
+        System.out.println(ex);
+        ex.printStackTrace();
+      }
     }
 
     return newChannel;
