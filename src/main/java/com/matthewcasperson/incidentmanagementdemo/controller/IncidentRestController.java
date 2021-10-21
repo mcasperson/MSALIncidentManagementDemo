@@ -8,6 +8,8 @@ import com.microsoft.graph.models.ConversationMember;
 import com.microsoft.graph.models.Team;
 import com.microsoft.graph.models.User;
 import com.microsoft.graph.requests.GraphServiceClient;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 import okhttp3.Request;
@@ -85,13 +87,21 @@ public class IncidentRestController {
 
     for (final String memberId : newChannelBody.members) {
       final ConversationMember member = new ConversationMember();
-      //member.id = "https://graph.microsoft.com/v1.0/users('" + memberId + "')";
       member.oDataType = "#microsoft.graph.aadUserConversationMember";
       member.additionalDataManager().put(
           "user@odata.bind",
-          new JsonPrimitive("https://graph.microsoft.com/v1.0/users('" + memberId + "')"));
+          new JsonPrimitive("https://graph.microsoft.com/v1.0/users('" +
+                  URLEncoder.encode(memberId, StandardCharsets.UTF_8) + "')"));
 
       try {
+        // add the user to the team
+        client
+            .teams(team)
+            .members()
+            .buildRequest()
+            .post(member);
+
+        // add the user to the channel
         client
             .teams(team)
             .channels(newChannel.id)

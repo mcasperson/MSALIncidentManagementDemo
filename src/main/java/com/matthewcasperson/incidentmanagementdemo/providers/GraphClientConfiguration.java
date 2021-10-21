@@ -22,6 +22,7 @@ public class GraphClientConfiguration {
                 "https://graph.microsoft.com/ChannelMember.ReadWrite.All",
                 "https://graph.microsoft.com/ChannelMessage.Send",
                 "https://graph.microsoft.com/Team.ReadBasic.All",
+                "https://graph.microsoft.com/TeamMember.ReadWrite.All",
                 "https://graph.microsoft.com/User.ReadBasic.All"),
             azureAd.getTenantId(),
             azureAd.getClientId(),
