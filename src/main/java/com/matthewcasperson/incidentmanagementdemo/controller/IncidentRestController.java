@@ -101,11 +101,22 @@ public class IncidentRestController {
     channel.displayName = newChannelBody.channelName;
     channel.membershipType = ChannelMembershipType.PRIVATE;
 
-    final Channel newChannel = client
-        .teams(team)
-        .channels()
-        .buildRequest()
-        .post(channel);
+    final List<Channel> existingChannel = Optional.ofNullable(client
+            .teams(team)
+            .channels()
+            .buildRequest()
+            .filter("displayName eq '" + newChannelBody.channelName + "'")
+            .get())
+        .map(BaseCollectionPage::getCurrentPage)
+        .orElse(List.of());
+
+    final Channel newChannel = existingChannel.isEmpty()
+        ? client
+          .teams(team)
+          .channels()
+          .buildRequest()
+          .post(channel)
+        : existingChannel.get(0);
 
     for (final String memberId : newChannelBody.members) {
       final ConversationMember member = new ConversationMember();

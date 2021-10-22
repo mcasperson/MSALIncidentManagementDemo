@@ -19,6 +19,7 @@ public class GraphClientConfiguration {
     return GraphServiceClient.builder()
         .authenticationProvider(new OboAuthenticationProvider(
             Set.of("https://graph.microsoft.com/Channel.Create",
+                "https://graph.microsoft.com/ChannelSettings.Read.All",
                 "https://graph.microsoft.com/ChannelMember.ReadWrite.All",
                 "https://graph.microsoft.com/ChannelMessage.Send",
                 "https://graph.microsoft.com/Team.ReadBasic.All",
