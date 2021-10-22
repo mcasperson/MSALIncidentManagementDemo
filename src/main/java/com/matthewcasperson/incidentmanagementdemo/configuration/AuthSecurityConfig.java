@@ -18,9 +18,11 @@ public class AuthSecurityConfig {
       super.configure(http);
       // All the paths that match `/api/**`(configurable) work as the resource server.
       // Other paths work as  the web application.
+      // @formatter:off
       http
         .antMatcher("/api/**")
         .authorizeRequests().anyRequest().authenticated();
+      // @formatter:on
     }
   }
 
