@@ -33,7 +33,7 @@ public class AuthSecurityConfig {
       // @formatter:off
       http
         .authorizeRequests()
-          .antMatchers("/", "/login", "/*.js", "/*.css").permitAll()
+          .antMatchers("/login", "/*.js", "/*.css").permitAll()
           .anyRequest().authenticated()
         .and()
           .csrf()
