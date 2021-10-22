@@ -2,9 +2,12 @@ package com.matthewcasperson.incidentmanagementdemo.controller;
 
 import com.google.gson.JsonPrimitive;
 import com.microsoft.graph.http.BaseCollectionPage;
+import com.microsoft.graph.models.BodyType;
 import com.microsoft.graph.models.Channel;
 import com.microsoft.graph.models.ChannelMembershipType;
+import com.microsoft.graph.models.ChatMessage;
 import com.microsoft.graph.models.ConversationMember;
+import com.microsoft.graph.models.ItemBody;
 import com.microsoft.graph.models.Team;
 import com.microsoft.graph.models.User;
 import com.microsoft.graph.requests.GraphServiceClient;
@@ -71,6 +74,25 @@ public class IncidentRestController {
         .orElse(List.of());
   }
 
+  @PostMapping("/api/teams/{team}/channel/{channel}/message")
+  public void createMessage(
+      @PathVariable("team") final String team,
+      @PathVariable("channel") final String channel,
+      @RequestBody final String message) {
+
+    final ChatMessage chatMessage = new ChatMessage();
+    chatMessage.body = new ItemBody();
+    chatMessage.body.content = message.replaceAll("\n", "<br/>");
+    chatMessage.body.contentType = BodyType.HTML;
+
+    client
+        .teams(team)
+        .channels(channel)
+        .messages()
+        .buildRequest()
+        .post(chatMessage);
+  }
+
   @PostMapping("/api/teams/{team}/channel")
   public Channel createChannel(
       @PathVariable("team") final String team,
@@ -91,7 +113,7 @@ public class IncidentRestController {
       member.additionalDataManager().put(
           "user@odata.bind",
           new JsonPrimitive("https://graph.microsoft.com/v1.0/users('" +
-                  URLEncoder.encode(memberId, StandardCharsets.UTF_8) + "')"));
+              URLEncoder.encode(memberId, StandardCharsets.UTF_8) + "')"));
 
       try {
         // add the user to the team

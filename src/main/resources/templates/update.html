@@ -6,45 +6,47 @@
 <div class="container">
   <div class="header">
     <div class="title">INCIDENT MANAGEMENT</div>
-    <div class="tab"><a href="create">Create Channel</a></div>
-    <div class="tab"><a href="update">Update Channel</a></div>
+    <div class="tab"><a href="/">Create Channel</a></div>
   </div>
   <div class="main">
-    <form class="formContainer">
+    <form class="formContainer" action="#" th:action="@{/update}" method="post">
+      <input type="hidden" name="channelId" th:value="${channelId}"/>
+      <input type="hidden" name="channelName" th:value="${channelName}"/>
+      <input type="hidden" name="team" th:value="${team}"/>
       <div class="formRow">
         <label>Incident channel:</label>
-        <span th:text="${channel.displayName}"/>
+        <span th:text="${channelName}"/>
       </div>
       <div class="formRow">
         <label>Update message:</label>
-        <input type="text" value="Enter an update">
+        <input type="text" name="customMessage" placeholder="Enter a custom update message">
       </div>
       <div class="formRow">
-        <input type="button" value="Status: Issue being investigated">
+        <input type="submit" name="status" value="Status: Issue being investigated">
       </div>
       <div class="formRow">
-        <input type="button" value="Status: Issue has been diagnosed">
+        <input type="submit" name="status" value="Status: Issue has been diagnosed">
       </div>
       <div class="formRow">
-        <input type="button" value="Status: Issue is being resolved">
+        <input type="submit" name="status" value="Status: Issue is being resolved">
       </div>
       <div class="formRow">
-        <input type="button" value="Estimated time to resolution: 10 mins">
+        <input type="submit" name="status" value="Estimated time to resolution: 10 mins">
       </div>
       <div class="formRow">
-        <input type="button" value="Estimated time to resolution: 30 mins">
+        <input type="submit" name="status" value="Estimated time to resolution: 30 mins">
       </div>
       <div class="formRow">
-        <input type="button" value="Estimated time to resolution: 1 hour">
+        <input type="submit" name="status" value="Estimated time to resolution: 1 hour">
       </div>
       <div class="formRow">
-        <input type="button" value="Estimated time to resolution: 3 hours">
+        <input type="submit" name="status" value="Estimated time to resolution: 3 hours">
       </div>
       <div class="formRow">
-        <input type="button" value="Estimated time to resolution: 6+ hours">
+        <input type="submit" name="status" value="Estimated time to resolution: 6+ hours">
       </div>
       <div class="formRow">
-        <input type="button" value="Estimated time to resolution: Unknown">
+        <input type="submit" name="status" value="Estimated time to resolution: Unknown">
       </div>
     </form>
   </div>

@@ -6,8 +6,7 @@
 <div class="container">
   <div class="header">
     <div class="title">INCIDENT MANAGEMENT</div>
-    <div class="tab"><a href="create">Create Channel</a></div>
-    <div class="tab"><a href="update">Update Channel</a></div>
+    <div class="tab"><a href="/">Create Channel</a></div>
   </div>
   <div class="main">
     <form class="formContainer" action="#" th:action="@{/create}" method="post">
@@ -21,16 +20,17 @@
       <div class="formRow">
         <label>Users:</label>
         <select size="5" name="users" multiple>
-          <option th:each="user: ${users}" th:value="${user.userPrincipalName}" th:text="${user.userPrincipalName}">
+          <option th:each="user: ${users}" th:value="${user.userPrincipalName}"
+                  th:text="${user.userPrincipalName}">
           </option>
         </select>
       </div>
       <div class="formRow">
         <label>Channel name:</label>
-        <input type="text" value="" name="channel">
+        <input type="text" value="" name="channelName">
       </div>
       <div class="formRow">
-        <input type="submit" value="Create Channel">
+        <input id="submit" type="submit" value="Create Channel">
       </div>
     </form>
   </div>

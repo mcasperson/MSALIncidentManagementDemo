@@ -2,6 +2,7 @@ package com.matthewcasperson.incidentmanagementdemo.controller;
 
 import static org.springframework.security.oauth2.client.web.reactive.function.client.ServerOAuth2AuthorizedClientExchangeFilterFunction.oauth2AuthorizedClient;
 
+import com.azure.core.annotation.QueryParam;
 import com.microsoft.graph.models.Channel;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +22,8 @@ public class IncidentWebController {
   WebClient webClient;
 
   @GetMapping("/")
-  public String getIndex() {
-    return "index";
-  }
-
-  @GetMapping("/create")
-  public ModelAndView getCreate(@RegisteredOAuth2AuthorizedClient("api") final OAuth2AuthorizedClient client) {
+  public ModelAndView getCreate(
+      @RegisteredOAuth2AuthorizedClient("api") final OAuth2AuthorizedClient client) {
 
     final ModelAndView mav = new ModelAndView("create");
 
@@ -59,22 +56,62 @@ public class IncidentWebController {
   @PostMapping("/create")
   public ModelAndView postCreate(
       @RegisteredOAuth2AuthorizedClient("api") final OAuth2AuthorizedClient client,
-      @RequestParam final String channel,
+      @RequestParam final String channelName,
       @RequestParam final String team,
       @RequestParam final List<String> users) {
 
-    final ModelAndView mav = new ModelAndView("update");
+    final ModelAndView mav = new ModelAndView("redirect:/update");
 
     final Channel newChannel = webClient
         .post()
         .uri("http://localhost:8080/api/teams/" + team + "/channel")
-        .bodyValue(new IncidentRestController.NewChannelBody(channel, users))
+        .bodyValue(new IncidentRestController.NewChannelBody(channelName, users))
         .attributes(oauth2AuthorizedClient(client))
         .retrieve()
         .bodyToMono(Channel.class)
         .block();
 
-    mav.addObject("channel", newChannel);
+    mav.addObject("channelId", newChannel.id);
+    mav.addObject("channelName", newChannel.displayName);
+    mav.addObject("team", team);
+    return mav;
+  }
+
+  @GetMapping("/update")
+  public ModelAndView getUpdate(
+      @QueryParam("team") final String team,
+      @QueryParam("channel") final String channelId,
+      @QueryParam("channel") final String channelName) {
+    final ModelAndView mav = new ModelAndView("update");
+    mav.addObject("team", team);
+    mav.addObject("channelId", channelId);
+    mav.addObject("channelName", channelName);
+    return mav;
+  }
+
+  @PostMapping("/update")
+  public ModelAndView postUpdate(
+      @RegisteredOAuth2AuthorizedClient("api") final OAuth2AuthorizedClient client,
+      @RequestParam final String channelName,
+      @RequestParam final String channelId,
+      @RequestParam final String team,
+      @RequestParam final String customMessage,
+      @RequestParam final String status) {
+
+    final ModelAndView mav = new ModelAndView("update");
+
+    webClient
+        .post()
+        .uri("http://localhost:8080/api/teams/" + team + "/channel/" + channelId + "/message")
+        .bodyValue(status + "\nMessage: " + customMessage)
+        .attributes(oauth2AuthorizedClient(client))
+        .retrieve()
+        .toBodilessEntity()
+        .block();
+
+    mav.addObject("channelName", channelName);
+    mav.addObject("channelId", channelId);
+    mav.addObject("team", team);
     return mav;
   }
 }
