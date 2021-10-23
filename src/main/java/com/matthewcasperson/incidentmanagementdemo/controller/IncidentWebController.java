@@ -25,7 +25,7 @@ public class IncidentWebController {
   public ModelAndView getCreateChannel(
       @RegisteredOAuth2AuthorizedClient("api") final OAuth2AuthorizedClient client) {
 
-    final ModelAndView mav = new ModelAndView("create");
+    final ModelAndView mav = new ModelAndView("channel");
 
     final List teams = webClient
         .get()
@@ -56,7 +56,7 @@ public class IncidentWebController {
       @RequestParam final String team,
       @RequestParam final List<String> users) {
 
-    final ModelAndView mav = new ModelAndView("redirect:/update");
+    final ModelAndView mav = new ModelAndView("redirect:/message");
 
     final Channel newChannel = webClient
         .post()
@@ -94,7 +94,7 @@ public class IncidentWebController {
       @RequestParam final String customMessage,
       @RequestParam final String status) {
 
-    final ModelAndView mav = new ModelAndView("update");
+    final ModelAndView mav = new ModelAndView("message");
 
     webClient
         .post()
