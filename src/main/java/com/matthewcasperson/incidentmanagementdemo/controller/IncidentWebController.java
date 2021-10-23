@@ -22,7 +22,7 @@ public class IncidentWebController {
   WebClient webClient;
 
   @GetMapping("/")
-  public ModelAndView getCreate(
+  public ModelAndView getCreateChannel(
       @RegisteredOAuth2AuthorizedClient("api") final OAuth2AuthorizedClient client) {
 
     final ModelAndView mav = new ModelAndView("create");
@@ -49,8 +49,8 @@ public class IncidentWebController {
     return mav;
   }
 
-  @PostMapping("/create")
-  public ModelAndView postCreate(
+  @PostMapping("/channel")
+  public ModelAndView postCreateChannel(
       @RegisteredOAuth2AuthorizedClient("api") final OAuth2AuthorizedClient client,
       @RequestParam final String channelName,
       @RequestParam final String team,
@@ -73,20 +73,20 @@ public class IncidentWebController {
     return mav;
   }
 
-  @GetMapping("/update")
-  public ModelAndView getUpdate(
+  @GetMapping("/message")
+  public ModelAndView getCreateMessage(
       @QueryParam("team") final String team,
       @QueryParam("channel") final String channelId,
       @QueryParam("channel") final String channelName) {
-    final ModelAndView mav = new ModelAndView("update");
+    final ModelAndView mav = new ModelAndView("message");
     mav.addObject("team", team);
     mav.addObject("channelId", channelId);
     mav.addObject("channelName", channelName);
     return mav;
   }
 
-  @PostMapping("/update")
-  public ModelAndView postUpdate(
+  @PostMapping("/message")
+  public ModelAndView postCreateMessage(
       @RegisteredOAuth2AuthorizedClient("api") final OAuth2AuthorizedClient client,
       @RequestParam final String channelName,
       @RequestParam final String channelId,

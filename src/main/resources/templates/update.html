@@ -9,7 +9,7 @@
     <div class="tab"><a href="/">Create Channel</a></div>
   </div>
   <div class="main">
-    <form class="formContainer" action="#" th:action="@{/update}" method="post">
+    <form class="formContainer" action="#" th:action="@{/message}" method="post">
       <input type="hidden" name="channelId" th:value="${channelId}"/>
       <input type="hidden" name="channelName" th:value="${channelName}"/>
       <input type="hidden" name="team" th:value="${team}"/>
