@@ -54,43 +54,13 @@ public class IncidentRestController {
   }
 
   @GetMapping("/api/users")
-  public List<User> getMembers() {
+  public List<User> getUsers() {
     return Optional.ofNullable(client
             .users()
             .buildRequest()
             .get())
         .map(BaseCollectionPage::getCurrentPage)
         .orElse(List.of());
-  }
-
-  @GetMapping("/api/teams/{team}/channels")
-  public List<Channel> getChannels(@PathVariable("team") final String teamId) {
-    return Optional.ofNullable(client
-            .teams(teamId)
-            .channels()
-            .buildRequest()
-            .get())
-        .map(BaseCollectionPage::getCurrentPage)
-        .orElse(List.of());
-  }
-
-  @PostMapping("/api/teams/{team}/channel/{channel}/message")
-  public void createMessage(
-      @PathVariable("team") final String team,
-      @PathVariable("channel") final String channel,
-      @RequestBody final String message) {
-
-    final ChatMessage chatMessage = new ChatMessage();
-    chatMessage.body = new ItemBody();
-    chatMessage.body.content = message.replaceAll("\n", "<br/>");
-    chatMessage.body.contentType = BodyType.HTML;
-
-    client
-        .teams(team)
-        .channels(channel)
-        .messages()
-        .buildRequest()
-        .post(chatMessage);
   }
 
   @PostMapping("/api/teams/{team}/channel")
@@ -148,5 +118,24 @@ public class IncidentRestController {
     }
 
     return newChannel;
+  }
+
+  @PostMapping("/api/teams/{team}/channel/{channel}/message")
+  public void createMessage(
+      @PathVariable("team") final String team,
+      @PathVariable("channel") final String channel,
+      @RequestBody final String message) {
+
+    final ChatMessage chatMessage = new ChatMessage();
+    chatMessage.body = new ItemBody();
+    chatMessage.body.content = message.replaceAll("\n", "<br/>");
+    chatMessage.body.contentType = BodyType.HTML;
+
+    client
+        .teams(team)
+        .channels(channel)
+        .messages()
+        .buildRequest()
+        .post(chatMessage);
   }
 }
